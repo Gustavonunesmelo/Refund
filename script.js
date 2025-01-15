@@ -44,6 +44,7 @@ form.onsubmit = (event) => {
   expenseAdd(newExpense)
 }
 
+// Adicionando um novo item na lista.
 function expenseAdd(newExpense) {
   try {
     const expenseItem = document.createElement("li")
@@ -54,13 +55,44 @@ function expenseAdd(newExpense) {
     expenseIcon.setAttribute("src", `img/${newExpense.category_id}.svg`)
     expenseIcon.setAttribute("alt", newExpense.category_name)
 
+    // Cria info da despesa. 
+    const expenseInfo = document.createElement("div")
+    expenseInfo.classList.add("expense-info")
+
+    // Cria o nome da despesa.
+    const expenseName = document.createElement("strong")
+    expenseName.textContent = newExpense.expense
+
+    // Cria a categoria da despesa. 
+    const expenseCategory = document.createElement("span")
+    expenseCategory.textContent = newExpense.category_name
+
+    // Adiciona nome e categoria na div das infomarçoes da despesa.
+    expenseInfo.append(expenseName, expenseCategory)
+
+    // Cria o valor da despesa.
+    const expenseAmount = document.createElement("span")
+    expenseAmount.classList.add("expense-amount")
+    expenseAmount.innerHTML = `<small>R$</samll>${newExpense.amount
+      .toUpperCase()
+      .replace("R$", "")}`
+
+    //Criando ícone de remover.
+    const removeIcon = document.createElement("img")
+    removeIcon.classList.add("remove-icon")
+    removeIcon.setAttribute("src", "img/remove.svg")
+    removeIcon.setAttribute("alt", "remover")
+
     // Adiciona as informaçoes no item. 
-    expenseItem.append(expenseIcon)
+    expenseItem.append(expenseIcon, expenseInfo, expenseAmount, removeIcon)
 
     // Adiciona o ítem na lista.
     expenseList.append(expenseItem)
 
-  } catch (error) {
+    // Adiciona o item na lista. 
+    expenseList.append(expenseItem)
 
+  } catch (error) {
+    alert("Não foi possicivel executar o processo")
   }
 }
