@@ -7,6 +7,7 @@ const category = document.getElementById("category")
 // Seleciona os elementos da lista.
 const expenseList = document.querySelector("ul")
 const expensesQuantity = document.querySelector("aside header p span")
+const expensesTotal = document.querySelector("aside header h2")
 
 amount.oninput = () => {
   // Obtem o valor atual do input e remove os caracteres não numericos.
@@ -29,6 +30,7 @@ function formatCurrencyBRL(value) {
   return value
 }
 
+// Captura o evento de submit do formulario para obter os valores.
 form.onsubmit = (event) => {
   event.preventDefault()
 
@@ -112,8 +114,61 @@ function updateTotals() {
     ${items.length > 1 ? "despesas" : "despesa"
       }`
 
-  } catch (error) {
+    // Variavel para incrementar o total. 
+    let total = 0
+    
+    // Percorre cada item (li) da lista (ul)
+    for(let item = 0; item < items.length; item++){
+      const itemAmount = items[item].querySelector(".expense-amount")
+
+      // Remove caracteres não numéricos e substitui a vírgula pelo ponto.
+      let value = itemAmount.textContent.replace(/[^\d,]/g, "").replace(",",".")
+
+      // Converte o valor para float.
+      value = parseFloat(value)
+
+      // Verifica se o numero é valido.
+      if (isNaN(value)) {
+        return alert(
+          "Não foi possívelcalcular o total. O valor nao parecer ser um número."
+        )
+      }
+
+      // Incrementa o valor total.
+      total += Number(value)
+    }
+
+    //Cria a span para adicionar O R$ formatado.
+    const symbolBRL = document.createElement("small")
+    symbolBRL.textContent = "R$"
+
+    // Formata o valor e remove o R$ que sera exibido pela small com o estilo customizado.
+    total = formatCurrencyBRL(total).toUpperCase().replace("R$", "")
+
+    // Limpa o conteudo do elemento.
+    expensesTotal.innerHTML = ""
+
+    // Adiciona o símbolo da moeda e o valor total formatado.
+    expensesTotal.append(symbolBRL, total)
+
+  } catch (error) { 
     console.log("Erro")
     alert("Não foi possível atualizar os totais.")
   }
 }
+
+// Evento que captura o clique nos itens da lista.
+expenseList.addEventListener("click", function (event) {
+  // Verificar se o elemento clicado é o ícone de remover.
+  if (event.target.classList.contains("remove-icon")) {
+
+    // Obtem a li pai do elemento clicado.
+    const item = event.target.closest(".expense")
+
+    // Remove um item da lista.
+    item.remove()
+
+    // Atualiza os totais.]
+    updateTotals()
+  }
+})
