@@ -86,6 +86,9 @@ function expenseAdd(newExpense) {
     removeIcon.setAttribute("src", "img/remove.svg")
     removeIcon.setAttribute("alt", "remover")
 
+    // Limpa o formulario.
+    formClear()
+
     // Adiciona as informaçoes no item. 
     expenseItem.append(expenseIcon, expenseInfo, expenseAmount, removeIcon)
 
@@ -172,3 +175,13 @@ expenseList.addEventListener("click", function (event) {
     updateTotals()
   }
 })
+
+// Funçao de limpar o formulario.
+function formClear() {
+  expense.value = ""
+  category.value = ""
+  amount.value = ""
+
+  // coloca o foco no amount.
+  expense.focus()
+}
